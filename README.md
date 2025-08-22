@@ -1,5 +1,5 @@
-# morphingwing/
-This practical implementation pack adds hands-on workflows, runnable scripts, and automation templates aligned with your Handbook sections (Design Optimisation Framework, Methodologies, Algorithms, Testing, Validation).
+# morphingwing
+this practical implementation pack adds hands-on workflows, runnable scripts, and automation templates aligned with your Handbook sections (Design Optimisation Framework, Methodologies, Algorithms, Testing, Validation).
 
 # Recommended Project Structure
 ---
@@ -66,3 +66,22 @@ Typical failure modes:
   * Geometry fails to heal → add constraints to keep thickness > 0. Mitigation: pre-validate in MATLAB; if failed, skip WB update.
 
   * Fluent exits with negative volume error → remesh with boundary-layer growth limits; reduce morph step size (continuation strategy).
+
+# 4)Python/OpenMDAO Alternative (if MATLAB licenses are constrained)
+
+  * Use ```openmdao``` + ```pyoptsparse``` (NSGA2/SNOPT) with a ```Component``` that calls XFOIL or Fluent.
+  
+  * Provide analytic/FD gradients for SNOPT with geometry-to-mesh continuity checks.
+
+Skeleton (pseudocode):
+```python
+class AeroEval(om.ExplicitComponent):
+def setup(self):
+self.add_input('dv', shape=(12,))
+self.add_output('neg_L_over_D')
+self.add_output('E_act')
+def compute(self, inputs, outputs):
+geom = build_bspline(inputs['dv'])
+res = run_xfoil(geom)
+outputs['neg_L_over_D'] = -res['L_over_D']
+outputs['E_act'] = res['E']```
