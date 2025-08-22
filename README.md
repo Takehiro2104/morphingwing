@@ -3,6 +3,7 @@ This practical implementation pack adds hands-on workflows, runnable scripts, an
 
 Recommended Project Structure
 ---
+```python
 morphwing/
   README.md
   /matlab
