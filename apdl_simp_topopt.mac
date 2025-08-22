@@ -1,0 +1,34 @@
+/prep7
+! Define material, element types, design region
+et,1,plane183
+mp,ex,1,7.0e10
+mp,prxy,1,0.33
+
+
+! SIMP density design var per element
+*dim,rho,array,NELEM
+rho(1)=1
+
+
+! Objective: minimise compliance, s.t. volume fraction and morphing tip deflection >= target
+! Pseudo-code loop (replace with full adjoint or OC update)
+*do,it,1,60
+! Apply loads and BCs for morphing deformation
+/solu
+antype,static
+solve
+/post1
+*get,comp, ... ! strain energy
+*get,defl, ... ! tip deflection along twist axis
+! Update densities via OC-like rule
+*vfun, rho, copy, rho
+! Project/Filter to avoid checkerboard
+*enddo
+
+
+! Export density field for CAD reconstruction
+/post1
+*cfopen,topo_field,txt
+*VWRITE, ELEM, rho(ELEM)
+(1i8,1x,E16.8)
+*cfclose
