@@ -32,3 +32,5 @@ solve
 *VWRITE, ELEM, rho(ELEM)
 (1i8,1x,E16.8)
 *cfclose
+
+! Debug notes: ensure plane-stress vs plane-strain consistency; lock drilling DOFs; apply perimeter penalty if greyscale persists.
