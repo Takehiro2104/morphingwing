@@ -1,0 +1,12 @@
+/file/read-case-data baseline.cas.gz
+/mesh/scale 1 1 1
+/define/models/viscous k-omega-sst yes
+/define/materials change-create air air yes 1.225 1.7894e-05 yes
+/solve/initialize/initialize-flow
+/solve/monitors/lift-coefficient yes
+/solve/monitors/drag-coefficient yes
+/solution/solve 600
+/report/surface-integrals/force-coefficient yes lift wing
+/report/surface-integrals/force-coefficient yes drag wing
+/file/write-data results.dat
+/file/quit yes
