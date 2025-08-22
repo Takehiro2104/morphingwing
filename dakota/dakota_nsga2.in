@@ -1,1 +1,56 @@
-main
+environment
+tabular_data
+tabular_data_file 'dakota_out.dat'
+
+
+strategy
+single_method
+
+
+method
+moga
+seed = 42
+population_size = 120
+max_function_evaluations = 800
+crossover_type two_point
+crossover_rate = 0.85
+mutation_type bit_flip
+mutation_rate = 0.02
+fitness_type domination_count
+replacement_type elitist
+
+
+model
+single
+interface = 'AERO'
+
+
+interface
+fork
+analysis_driver = 'matlab -batch "evalDesign_cli"'
+file_tag
+work_directory named 'run_$(iterator)
+directory_tag
+copy_files = 'matlab/evalDesign_cli.m' 'matlab/evalDesign.m' \
+'matlab/buildAirfoil_bspline.m' 'matlab/runCFD_xfoil.m' \
+'matlab/constraints.m' 'matlab/surrogate_fit_gp.m'
+named 'matlab'
+parameters_file = 'params.in'
+results_file = 'results.out'
+asynchronous
+evaluation_concurrency = 8
+
+
+variables
+continuous_design = 12
+lower_bounds 12 * -0.06
+upper_bounds 12 * 0.06
+descriptors 'DV1' 'DV2' 'DV3' 'DV4' 'DV5' 'DV6' 'DV7' 'DV8' 'DV9' 'DV10' 'DV11' 'DV12'
+
+
+responses
+num_objectives = 2
+objective_functions_scaling 1.0 1.0
+nonlinear_inequality_constraints = 1
+no_gradients
+no_hessians
